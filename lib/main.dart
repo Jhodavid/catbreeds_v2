@@ -1,24 +1,18 @@
+import 'package:catbreeds/presentation/providers/breeds_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import 'package:catbreeds/config/app_theme.dart';
-import 'package:catbreeds/config/app_environment.dart';
 import 'package:catbreeds/config/router/app_router.dart';
 import 'package:catbreeds/config/localization/app_localization.dart';
-
-import 'package:catbreeds/infrastructure/services/cat_api_dio_service.dart';
 
 
 
 Future<void> main() async {
   await dotenv.load(fileName: '.env');
   WidgetsFlutterBinding.ensureInitialized();
-
-  CatApiDioService().configureDio();
-  CatApiDioService().configureApiKey(AppEnvironment.theCatApiKey);
 
   runApp(
     const ProviderScope(
@@ -27,13 +21,15 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
 
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     bool isDarkMode = MediaQuery.of(context).platformBrightness == Brightness.dark;
+
+    ref.watch(breedsProvider);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
