@@ -1,81 +1,109 @@
 import 'dart:convert';
-
-import 'package:http/http.dart' as http;
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 
 
-import 'catbreeds_api_datasource_test.mocks.dart';
 import 'package:catbreeds/domain/entities/breed_entity.dart';
-import 'package:catbreeds/infrastructure/models/app_errors.dart';
 import 'package:catbreeds/infrastructure/datasources/catbreeds_api_datasource.dart';
 
+import 'catbreeds_api_datasource_test.mocks.dart';
 
 
-@GenerateMocks([http.Client])
+
+final mockHeaders = {
+  "content-type": "application/json; charset=utf-8",
+  "Accept": "application/json",
+};
+
+@GenerateMocks([Client])
 void main() {
   final client = MockClient();
-  final datasource = CatbreedsApiDatasource();
+  final datasource = CatbreedsApiDatasource(
+    client,
+    mockHeaders
+  );
 
   group('getCatBreeds', () {
     test('returns cat breeds if the call is completed successfully', () async {
+      final responseJson = jsonEncode(getCatBreedsResponse);
 
-      when(client.get(Uri.parse('https://api.thecatapi.com/v1/breeds')).then((_) async {
-        return http.Response(json.encode(getCatBreedsResponse).toString(), 200);
-      }));
+      when(client.get(
+        Uri.parse('https://api.thecatapi.com/v1/breeds'),
+        headers: mockHeaders
+      )).thenAnswer((_) async {
+        return Response(responseJson, 200, headers: mockHeaders);
+      });
 
-      expect(await datasource.getCatBreeds(client), isA<List<BreedEntity>>());
+      expect(await datasource.getCatBreeds(), isA<List<BreedEntity>>());
     });
 
     test('Custom Error if the call is completes with an error', () async {
-      when(client.get(Uri.parse('https://api.thecatapi.com/v1/breeds')).then((_) async {
-        return http.Response('Not Found', 404);
-      }));
+      when(client.get(
+        Uri.parse('https://api.thecatapi.com/v1/breeds'),
+        headers: mockHeaders
+      )).thenAnswer((_) async {
+        return Response('Not Found', 404, headers: mockHeaders);
+      });
 
-      expect(datasource.getCatBreeds(client), CustomError);
+      expect(datasource.getCatBreeds(), throwsException);
     });
 
     test('Custom Error if the call is completes with a connexion error', () async {
-      when(client.get(Uri.parse('https://api.thecatapi.com/v1/breeds')).then((_) async {
-        return http.Response('Error in request', 500);
-      }));
+      when(client.get(
+        Uri.parse('https://api.thecatapi.com/v1/breeds'),
+        headers: mockHeaders
+      )).thenAnswer((_) async {
+        return Response('Error in request', 500, headers: mockHeaders);
+      });
 
-      expect(datasource.getCatBreeds(client), ConnectionError);
+      expect(datasource.getCatBreeds(), throwsException);
     });
   });
 
   group('getCatBreedImagesURLs', () {
     test('returns cat breeds if the call is completed successfully', () async {
-      when(client.get(Uri.parse('https://api.thecatapi.com/v1/images/search?limit=3&breed_ids')).then((_) async {
-        return http.Response(json.encode(getCatBreedImagesURLsResponse).toString(), 200);
-      }));
+      final responseJson = jsonEncode(getCatBreedImagesURLsResponse);
 
-      expect(await datasource.getCatBreedImagesURLs(client, breedId: 'abys'), isA<List<BreedEntity>>());
+      when(client.get(
+        Uri.parse('https://api.thecatapi.com/v1/images/search?limit=3&breed_ids=abys'),
+        headers: mockHeaders
+      )).thenAnswer((_) async {
+        return Response(responseJson, 200, headers: mockHeaders);
+      });
+
+      expect(await datasource.getCatBreedImagesURLs('abys'), isA<List<String>>());
     });
 
     test('Custom Error if the call is completes with an error', () async {
-      when(client.get(Uri.parse('https://api.thecatapi.com/v1/images/search?limit=3&breed_ids')).then((_) async {
-        return http.Response('Not Found', 404);
-      }));
+      when(client.get(
+        Uri.parse('https://api.thecatapi.com/v1/images/search?limit=3&breed_ids=abys'),
+        headers: mockHeaders
+      )).thenAnswer((_) async {
+        return Response('Not Found', 404, headers: mockHeaders);
+      });
 
-      expect(datasource.getCatBreedImagesURLs(client, breedId: 'abys'), CustomError);
+      expect(datasource.getCatBreedImagesURLs('abys'), throwsException);
     });
 
     test('Custom Error if the call is completes with a connexion error', () async {
-      when(client.get(Uri.parse('https://api.thecatapi.com/v1/images/search?limit=3&breed_ids')).then((_) async {
-        return http.Response('Error in request', 500);
-      }));
+      when(client.get(
+        Uri.parse('https://api.thecatapi.com/v1/images/search?limit=3&breed_ids=abys'),
+        headers: mockHeaders
+      )).thenAnswer((_) async {
+        return Response('Error in request', 500, headers: mockHeaders);
+      });
 
-      expect(datasource.getCatBreedImagesURLs(client, breedId: 'abys'), ConnectionError);
+      expect(datasource.getCatBreedImagesURLs('abys'), throwsException);
     });
   });
 }
 
 
 
-final getCatBreedImagesURLsResponse = [
+final List<Map<String, dynamic>> getCatBreedImagesURLsResponse = [
   {
     "id": "xnzzM6MBI",
     "url": "https://cdn2.thecatapi.com/images/xnzzM6MBI.jpg",
@@ -96,7 +124,7 @@ final getCatBreedImagesURLsResponse = [
   }
 ];
 
-final getCatBreedsResponse = [
+final getCatBreedsResponse = <Map<String, dynamic>>[
   {
     "weight": {
     "imperial": "7  -  10",
@@ -138,8 +166,8 @@ final getCatBreedsResponse = [
     "wikipedia_url": "https://en.wikipedia.org/wiki/Abyssinian_(cat)",
     "hypoallergenic": 0,
     "reference_image_id": "0XYvRd7oD"
-    },
-    {
+  },
+  {
     "weight": {
     "imperial": "7 - 10",
     "metric": "3 - 5"
