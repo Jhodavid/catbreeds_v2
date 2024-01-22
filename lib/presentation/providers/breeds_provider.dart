@@ -1,3 +1,4 @@
+import 'package:catbreeds/config/app_environment.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
@@ -6,11 +7,22 @@ import 'package:catbreeds/domain/utils/request_status_enum.dart';
 
 import 'package:catbreeds/infrastructure/datasources/catbreeds_api_datasource.dart';
 import 'package:catbreeds/infrastructure/repositories/catbreeds_repository_impl.dart';
+import 'package:http/http.dart';
 
 
 
 final breedsProvider = StateNotifierProvider<BreedsNotifier, BreedsState>((ref) {
-  final catbreedsRepository = CatbreedsRepositoryImpl(CatbreedsApiDatasource());
+
+  final catbreedsRepository = CatbreedsRepositoryImpl(
+    CatbreedsApiDatasource(
+      Client(),
+      {
+        "Content-type": "application/json",
+        "Accept": "application/json",
+        "x-api-key": AppEnvironment.theCatApiKey
+      }
+    ),
+  );
 
   return BreedsNotifier(
     catbreedsRepository: catbreedsRepository

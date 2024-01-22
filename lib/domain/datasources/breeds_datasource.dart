@@ -1,4 +1,4 @@
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 import 'package:catbreeds/domain/entities/breed_entity.dart';
 
@@ -6,8 +6,13 @@ import 'package:catbreeds/domain/entities/breed_entity.dart';
 
 abstract class AbstractBreedsDatasource {
 
-  Future<List<BreedEntity>> getCatBreeds(http.Client httpClient);
+  final Client httpClient;
+  final Map<String, String>? headers;
 
-  Future<List<String>> getCatBreedImagesURLs(http.Client httpClient, {required String breedId});
+  AbstractBreedsDatasource(this.httpClient, this.headers);
+
+  Future<List<BreedEntity>> getCatBreeds();
+
+  Future<List<String>> getCatBreedImagesURLs(String breedId);
 
 }
