@@ -4,27 +4,27 @@ import 'package:flutter/foundation.dart';
 import 'package:catbreeds/domain/entities/breed_entity.dart';
 import 'package:catbreeds/domain/datasources/breeds_datasource.dart';
 
-import 'package:catbreeds/infrastructure/models/app_errors.dart';
+
 import 'package:catbreeds/infrastructure/models/breeds_response.dart';
 import 'package:catbreeds/infrastructure/models/breed_image_response.dart';
-
 import 'package:catbreeds/infrastructure/mappers/catbreeds_api_mapper.dart';
 
 
 
 class CatbreedsApiDatasource extends AbstractBreedsDatasource {
 
-  CatbreedsApiDatasource();
+  CatbreedsApiDatasource(super.httpClient, super.headers);
 
   @override
-  Future<List<BreedEntity>> getCatBreeds(httpClient) async {
+  Future<List<BreedEntity>> getCatBreeds() async {
     try {
       final response = await httpClient.get(
-        Uri.parse('https://api.thecatapi.com/v1/breeds')
+        Uri.parse('https://api.thecatapi.com/v1/breeds'),
+        headers: headers
       );
 
       if(response.statusCode != 200) {
-        throw CustomError('No Data');
+        throw Exception('No Data');
       }
 
       final data = jsonDecode(response.body);
@@ -39,19 +39,20 @@ class CatbreedsApiDatasource extends AbstractBreedsDatasource {
       return breedList;
     } catch (e) {
       if(kDebugMode) print(e);
-      throw ConnectionError();
+      throw Exception('Failed to parse Catbreeds');
     }
   }
 
   @override
-  Future<List<String>> getCatBreedImagesURLs(httpClient, {required String breedId}) async {
+  Future<List<String>> getCatBreedImagesURLs(String breedId) async {
     try {
       final response = await httpClient.get(
-        Uri.parse('https://api.thecatapi.com/v1/images/search?limit=3&breed_ids=$breedId')
+        Uri.parse('https://api.thecatapi.com/v1/images/search?limit=3&breed_ids=$breedId'),
+        headers: headers
       );
 
       if(response.statusCode != 200) {
-        throw CustomError('No Data');
+        throw Exception('No Data');
       }
 
       final data = jsonDecode(response.body);
@@ -66,7 +67,7 @@ class CatbreedsApiDatasource extends AbstractBreedsDatasource {
       return breedImages;
     } catch (e) {
       if(kDebugMode) print(e);
-      throw ConnectionError();
+      throw Exception('Failed to parse Catbreeds');
     }
   }
 }
