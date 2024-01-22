@@ -22,16 +22,17 @@ class AppTheme {
 
   static const colorDarkScheme = ColorScheme(
     background: Colors.black,
-    onBackground: Colors.black26,
+    onBackground: Color(0xFFEDF5FD),
     brightness: Brightness.light,
     error: Colors.red,
     onError: Colors.redAccent,
-    primary: Colors.green,
+    primary: Color(0xff2d4949),
     onPrimary: Colors.greenAccent,
-    secondary: Colors.blue,
+    secondary: Color(0xFF416B8A),
     onSecondary: Colors.blueAccent,
-    surface: Colors.grey,
+    surface: Color(0xF3F1F1FF),
     onSurface: Colors.blueGrey,
+    surfaceTint: Colors.white
   );
 
   final bool isDarkMode;
@@ -66,7 +67,8 @@ class AppTheme {
         bodyLarge: const TextStyle(
           fontWeight: FontWeight.bold,
         ),
-        titleSmall: const TextStyle(
+        titleSmall: TextStyle(
+          color: colorScheme.background
         ),
         titleMedium: const TextStyle(
           fontWeight: FontWeight.bold,
@@ -93,9 +95,9 @@ class AppTheme {
           // cursorColor: _blueApp,
           // selectionHandleColor: _blueApp
       ),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(
-        // color: _greenLightApp,
-        circularTrackColor: Colors.grey,
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: colorScheme.secondary,
+        circularTrackColor: colorScheme.background,
       ),
       appBarTheme: const AppBarTheme(
         // backgroundColor: _greenLightApp,
@@ -105,10 +107,10 @@ class AppTheme {
         ),
       ),
       tooltipTheme: TooltipThemeData(
-        decoration: BoxDecoration(
-          // color: _blueApp,
-          borderRadius: BorderRadius.circular(5)
-        ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: colorScheme.secondary
+          ),
         triggerMode: TooltipTriggerMode.tap
       )
     );

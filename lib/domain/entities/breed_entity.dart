@@ -1,4 +1,6 @@
 
+import 'package:catbreeds/domain/utils/request_status_enum.dart';
+
 class BreedEntity {
 
   final String id;
@@ -8,6 +10,7 @@ class BreedEntity {
   final String lifeSpan;
   final String description;
   final List<String> imagesUrls;
+  final RequestStatusEnum imagesRequestStatus;
   final int adaptability;
   final int affectionLevel;
   final int childFriendly;
@@ -28,10 +31,10 @@ class BreedEntity {
   final int suppressedTail;
   final int shortLegs;
   final int hypoallergenic;
-  final Uri? cfaUrl;
-  final Uri? vetstreetUrl;
-  final Uri? vcahospitalsUrl;
-  final Uri? wikipediaUrl;
+  final String? cfaUrl;
+  final String? vetstreetUrl;
+  final String? vcahospitalsUrl;
+  final String? wikipediaUrl;
 
   BreedEntity({
     required this.id, 
@@ -40,7 +43,8 @@ class BreedEntity {
     required this.origin, 
     required this.lifeSpan, 
     required this.description, 
-    this.imagesUrls = const [], 
+    this.imagesUrls = const [],
+    this.imagesRequestStatus = RequestStatusEnum.none,
     required this.adaptability, 
     required this.affectionLevel, 
     required this.childFriendly, 
@@ -75,6 +79,7 @@ class BreedEntity {
     String? lifeSpan,
     String? description,
     List<String>? imagesUrls,
+    RequestStatusEnum? imagesRequestStatus,
     int? adaptability,
     int? affectionLevel,
     int? childFriendly,
@@ -95,10 +100,10 @@ class BreedEntity {
     int? suppressedTail,
     int? shortLegs,
     int? hypoallergenic,
-    Uri? cfaUrl,
-    Uri? vetstreetUrl,
-    Uri? vcahospitalsUrl,
-    Uri? wikipediaUrl
+    String? cfaUrl,
+    String? vetstreetUrl,
+    String? vcahospitalsUrl,
+    String? wikipediaUrl
   }) => BreedEntity(
     id: id ?? this.id, 
     name: name ?? this.name, 
@@ -107,6 +112,7 @@ class BreedEntity {
     lifeSpan: lifeSpan ?? this.lifeSpan, 
     description: description ?? this.description,
     imagesUrls: imagesUrls ?? this.imagesUrls,
+    imagesRequestStatus: imagesRequestStatus ?? this.imagesRequestStatus,
     adaptability: adaptability ?? this.adaptability,
     affectionLevel: affectionLevel ?? this.affectionLevel,
     childFriendly: childFriendly ?? this.childFriendly,
