@@ -15,31 +15,29 @@ Widget createCharacteristicsWidget(BreedEntity breed) => MaterialApp(
 
 
 void main() {
-  group('Characteristics cat breed widget test', () {
-    testWidgets('Test if page have the breed information', (widgetTester) async {
-      await widgetTester.pumpWidget(createCharacteristicsWidget(selectedBreed));
-      await widgetTester.pumpAndSettle();
-      expect(find.byKey(const Key('adaptability')), findsOneWidget);
-      expect(find.byKey(const Key('affectionLevel')), findsOneWidget);
-      expect(find.byKey(const Key('childFriendly')), findsOneWidget);
-      expect(find.byKey(const Key('dogFriendly')), findsOneWidget);
-      expect(find.byKey(const Key('energyLevel')), findsOneWidget);
-      expect(find.byKey(const Key('grooming')), findsOneWidget);
-      expect(find.byKey(const Key('healthIssues')), findsOneWidget);
-      expect(find.byKey(const Key('intelligence')), findsOneWidget);
-      expect(find.byKey(const Key('sheddingLevel')), findsOneWidget);
-      expect(find.byKey(const Key('socialNeeds')), findsOneWidget);
-      expect(find.byKey(const Key('strangerFriendly')), findsOneWidget);
-      expect(find.byKey(const Key('vocalisation')), findsOneWidget);
-      expect(find.byKey(const Key('experimental')), findsNothing);
-      expect(find.byKey(const Key('hairless')), findsNothing);
-      expect(find.byKey(const Key('natural')), findsOneWidget);
-      expect(find.byKey(const Key('rare')), findsNothing);
-      expect(find.byKey(const Key('rex')), findsNothing);
-      expect(find.byKey(const Key('suppressedTail')), findsNothing);
-      expect(find.byKey(const Key('shortLegs')), findsNothing);
-      expect(find.byKey(const Key('hypoallergenic')), findsNothing);
-    });
+  testWidgets('Test if page have the breed information', (widgetTester) async {
+    await widgetTester.pumpWidget(createCharacteristicsWidget(selectedBreed));
+    await widgetTester.pumpAndSettle();
+    expect(find.byKey(const Key('adaptability')), findsOneWidget);
+    expect(find.byKey(const Key('affectionLevel')), findsOneWidget);
+    expect(find.byKey(const Key('childFriendly')), findsOneWidget);
+    expect(find.byKey(const Key('dogFriendly')), findsOneWidget);
+    expect(find.byKey(const Key('energyLevel')), findsOneWidget);
+    expect(find.byKey(const Key('grooming')), findsOneWidget);
+    expect(find.byKey(const Key('healthIssues')), findsOneWidget);
+    expect(find.byKey(const Key('intelligence')), findsOneWidget);
+    expect(find.byKey(const Key('sheddingLevel')), findsOneWidget);
+    expect(find.byKey(const Key('socialNeeds')), findsOneWidget);
+    expect(find.byKey(const Key('strangerFriendly')), findsOneWidget);
+    expect(find.byKey(const Key('vocalisation')), findsOneWidget);
+    expect(find.byKey(const Key('experimental')), findsNothing);
+    expect(find.byKey(const Key('hairless')), findsNothing);
+    expect(find.byKey(const Key('natural')), findsOneWidget);
+    expect(find.byKey(const Key('rare')), findsNothing);
+    expect(find.byKey(const Key('rex')), findsNothing);
+    expect(find.byKey(const Key('suppressedTail')), findsNothing);
+    expect(find.byKey(const Key('shortLegs')), findsNothing);
+    expect(find.byKey(const Key('hypoallergenic')), findsNothing);
   });
 }
 

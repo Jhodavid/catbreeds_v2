@@ -10,21 +10,23 @@ import 'package:flutter_test/flutter_test.dart';
 Widget createDetailPage(BreedEntity breed) => MaterialApp(
   supportedLocales: AppLocalizations.supportedLocales,
   localizationsDelegates: AppLocalizations.localizationsDelegates,
-  home: DetailPage(breed: breed),
+  home: MaterialApp(
+    supportedLocales: AppLocalizations.supportedLocales,
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    home: DetailPage(breed: breed)
+  )
 );
 
 
 void main() {
-  group('Detail cat breed page test', () {
-    testWidgets('Test if page have the breed information', (widgetTester) async {
-      await widgetTester.pumpWidget(createDetailPage(selectedBreed));
-      await widgetTester.pumpAndSettle();
-      expect(find.text(selectedBreed.name), findsOneWidget);
-      expect(find.text(selectedBreed.description), findsOneWidget);
-      expect(find.text(selectedBreed.origin), findsOneWidget);
-      expect(find.textContaining(selectedBreed.lifeSpan), findsOneWidget);
-      expect(find.textContaining(selectedBreed.weight), findsOneWidget);
-    });
+  testWidgets('Test if page have the breed information', (widgetTester) async {
+    await widgetTester.pumpWidget(createDetailPage(selectedBreed));
+    await widgetTester.pumpAndSettle();
+    expect(find.text(selectedBreed.name), findsOneWidget);
+    expect(find.text(selectedBreed.description), findsOneWidget);
+    expect(find.text(selectedBreed.origin), findsOneWidget);
+    expect(find.textContaining(selectedBreed.lifeSpan), findsOneWidget);
+    expect(find.textContaining(selectedBreed.weight), findsOneWidget);
   });
 }
 
